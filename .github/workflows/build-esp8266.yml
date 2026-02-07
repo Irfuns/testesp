@@ -1,0 +1,43 @@
+name: Build ESP8266 BIN
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Arduino CLI
+      uses: arduino/setup-arduino-cli@v1
+
+    - name: Add ESP8266 board manager URL
+      run: |
+        arduino-cli config init
+        arduino-cli config set board_manager.additional_urls \
+        https://arduino.esp8266.com/stable/package_esp8266com_index.json
+
+    - name: Update index
+      run: |
+        arduino-cli core update-index
+
+    - name: Install ESP8266 core
+      run: |
+        arduino-cli core install esp8266:esp8266
+
+    - name: Compile sketch for ESP-12F
+      run: |
+        arduino-cli compile \
+          --fqbn esp8266:esp8266:generic:xtal=80,flash=4M3M,baud=115200 \
+          ota_esp8266
+
+    - name: Upload BIN artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: esp8266-bin
+        path: |
+          ota_esp8266/build/esp8266.esp8266.generic/*.bin
