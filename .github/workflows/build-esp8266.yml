@@ -30,9 +30,15 @@ jobs:
           --output-dir build \
           testesp
 
+    - name: Show build output (debug)
+      run: |
+        echo "=== BUILD FILES ==="
+        find build -type f
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        files: build/*.bin
+        files: |
+          build/**/*.bin
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
