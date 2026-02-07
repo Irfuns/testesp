@@ -32,8 +32,7 @@ jobs:
     - name: Compile sketch for ESP-12F
       run: |
         arduino-cli compile \
-          --fqbn esp8266:esp8266:generic:xtal=80,flash=4M3M,baud=115200 \
-          ota_esp8266
+          --fqbn esp8266:esp8266:nodemcuv2\testesp
 
     - name: Upload BIN artifact
       uses: actions/upload-artifact@v4
