@@ -26,11 +26,11 @@ jobs:
       run: |
         arduino-cli compile \
           --fqbn esp8266:esp8266:generic \
+          --output-dir build \
           testesp
 
     - name: Upload BIN artifact
       uses: actions/upload-artifact@v4
       with:
         name: esp8266-bin
-        path: |
-          testesp/build/esp8266.esp8266.generic/*.bin
+        path: build/*.bin
